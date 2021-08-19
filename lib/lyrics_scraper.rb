@@ -24,9 +24,7 @@ module LyricsScraper
     end
   end
 
-  def parse_page(song, browser, driver)
-    browser.visit(song.url)
-    wait_to_load(driver)
+  def parse_page(song)
     html = Nokogiri::HTML(HTTParty.get(browser.current_url).body)
 
     # Check to see if there are any lyrics on the page
