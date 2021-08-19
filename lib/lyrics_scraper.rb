@@ -9,6 +9,21 @@ module LyricsScraper
     end
   end
 
+  def scrape_nonRESTful_url(songs)
+    puts "Configuring Capybara session"
+    config
+    browser = Capybara.current_session
+    driver = browser.driver.browser
+    puts "Parsing #{songs.count} songs..."
+    songs.each_with_index do |song, index|
+      print "\rGetting URL to Song ##{index + 1}           "
+      browser.visit(song.restful_url)
+      # wait_to_load(driver)
+      song.url = browser.current_url
+      song.save
+    end
+  end
+
   def parse_page(song, browser, driver)
     browser.visit(song.url)
     wait_to_load(driver)
@@ -16,14 +31,20 @@ module LyricsScraper
 
     # Check to see if there are any lyrics on the page
     return if(html.css('div.LyricsPlaceholder__Container-uen8er-1').count != 0)
-    # Grab all lyrics containers (lyrics divs are separated by ads, etc)
-    artist = html.css('.SongHeader__Artist-sc-1b7aqpg-9')[0].text
-    title = html.css('.SongHeader__Title-sc-1b7aqpg-7')[0].text
-
-    song.update(artist: artist, title: title)
-
-    lyrics_containers = html.css('div.Lyrics__Container-sc-1ynbvzw-8')
-    write_lyrics_to_file(lyrics_containers, song)
+    begin
+      # Grab all lyrics containers (lyrics divs are separated by ads, etc)
+      artist = html.css('.SongHeader__Artist-sc-1b7aqpg-9')[0].text
+      title = html.css('.SongHeader__Title-sc-1b7aqpg-7')[0].text
+  
+      song.update(artist: artist, title: title)
+  
+      lyrics_containers = html.css('div.Lyrics__Container-sc-1ynbvzw-8')
+      write_lyrics_to_file(lyrics_containers, song)
+    rescue => e
+      if e.message == "undefined method `text' for nil:NilClass"
+        parse_page(song, browser, driver)
+      end
+    end
 
 
     # Unfinished logic to try and parse which lyrics are Jon Mess lyrics
