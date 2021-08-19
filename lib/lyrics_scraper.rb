@@ -5,7 +5,7 @@ module LyricsScraper
     browser = Capybara.current_session
     driver = browser.driver.browser
     songs.each do |song|
-      parse_page(song, browser, driver)
+      parse_page(song)
     end
   end
 
