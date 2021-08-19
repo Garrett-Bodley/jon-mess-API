@@ -28,8 +28,8 @@ module LyricsScraper
 
     # Check to see if there are any lyrics on the page
     if(html.css('div.LyricsPlaceholder__Container-uen8er-1').count != 0)
-      puts "#{song.title} has no lyrics!"
-      return
+      song.destroy
+      return false
     end
     
     begin
