@@ -24,7 +24,7 @@ module LyricsScraper
   end
 
   def parse_page(song)
-    html = Nokogiri::HTML(HTTParty.get(browser.current_url).body)
+    html = Nokogiri::HTML(HTTParty.get(song.url).body)
 
     # Check to see if there are any lyrics on the page
     if(html.css('div.LyricsPlaceholder__Container-uen8er-1').count != 0)
