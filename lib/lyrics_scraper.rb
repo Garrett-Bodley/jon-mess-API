@@ -56,13 +56,19 @@ module LyricsScraper
   end
 
   def write_lyrics_to_file(containers, song)
+    filepath = "./lib/lyrics/#{song.title} - #{song.artist}.txt"
+    # If lyrics already have been logged, do not write lyrics as this would lead to duplicate data
+    return if File.exists?(filepath)
 
-    binding.pry
-    output = File.new("./lib/lyrics/#{song.title} - #{song.artist}.txt", "a+")
-    containers.each do |container|
-      text = container.xpath('text() or /i.text()')
-      text.each{|line| output.puts(line.text)}
-      output.puts("")
+    output = File.new(filepath, "a+")
+    # Genius separates lyrics into multiple containers of variable length.
+    # There is an ad between each container.
+    containers.each do |container, index|
+      text = container.xpath('text() | descendant::*/text()').reduce(''){|accum, line| accum += line.to_s + "\n"}
+      next if IO.binread(output.path).match?(Regexp.quote(text))
+
+      output.puts(text)
+      output.puts("") unless index == containers.length - 1
     end
     output.close
     binding.pry
