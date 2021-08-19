@@ -27,7 +27,11 @@ module LyricsScraper
     html = Nokogiri::HTML(HTTParty.get(browser.current_url).body)
 
     # Check to see if there are any lyrics on the page
-    return if(html.css('div.LyricsPlaceholder__Container-uen8er-1').count != 0)
+    if(html.css('div.LyricsPlaceholder__Container-uen8er-1').count != 0)
+      puts "#{song.title} has no lyrics!"
+      return
+    end
+    
     begin
       # Grab all lyrics containers (lyrics divs are separated by ads, etc)
       artist = html.css('.SongHeader__Artist-sc-1b7aqpg-9')[0].text
