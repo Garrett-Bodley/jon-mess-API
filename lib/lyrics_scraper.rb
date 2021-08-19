@@ -1,10 +1,9 @@
 module LyricsScraper
 
   def scrape(songs)
-    config
-    browser = Capybara.current_session
-    driver = browser.driver.browser
-    songs.each do |song|
+    puts "Scraping #{songs.count} songs..."
+    songs.each_with_index do |song, index|
+      print "\rProcessing song ##{index}             "
       parse_page(song)
     end
   end
