@@ -2,10 +2,13 @@ module LyricsScraper
 
   def scrape(songs)
     puts "Scraping #{songs.count} songs..."
+    count = songs.count
     songs.each_with_index do |song, index|
       print "\rProcessing song ##{index}             "
-      parse_page(song)
+      puts "\nSong ##{song.id} has no lyrics and has been removed from the database." if parse_page(song) == false
     end
+    puts "Scraping completed!"
+    puts "#{count - Songs.count} songs were removed from the database."
   end
 
   def scrape_nonRESTful_url(songs)
