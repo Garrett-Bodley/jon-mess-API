@@ -38,8 +38,8 @@ module LyricsScraper
     
     begin
       # Grab all lyrics containers (lyrics divs are separated by ads, etc)
-      artist = html.css('.SongHeader__Artist-sc-1b7aqpg-9')[0].text
-      title = html.css('.SongHeader__Title-sc-1b7aqpg-7')[0].text
+      artist = html.search('.SongHeader__Artist-sc-1b7aqpg-9', '.SongHeaderVariantdesktop__Artist-sc-12tszai-9')[0].text
+      title = html.search('.SongHeaderVariantdesktop__Title-sc-12tszai-7', '.SongHeader__Title-sc-1b7aqpg-7')[0].text
   
       song.update(artist: artist, title: title)
   
