@@ -97,7 +97,6 @@ module LyricsScraper
       output.puts("") unless index == containers.length - 1
     end
     output.close
-    binding.pry
   end
 
   def wait_to_load(driver)
