@@ -81,7 +81,8 @@ module LyricsScraper
   end
 
   def write_lyrics_to_file(containers, song)
-    filepath = "./lib/lyrics/#{song.title} - #{song.artist}.txt"
+    filename = "#{song.title} - #{song.artist}.txt".split('/').join(":")
+    filepath = "./lib/lyrics/#{filename}"
     # If lyrics already have been logged, do not write lyrics as this would lead to duplicate data
     return if File.exists?(filepath)
 
