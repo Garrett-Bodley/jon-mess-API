@@ -8,8 +8,8 @@ module LyricsScraper
       puts "\nSong ##{song.id} has no lyrics and has been removed from the database." if parse_page(song) == false
       sleep(0.2)
     end
-    puts "Scraping completed!"
-    puts "#{count - Songs.count} songs were removed from the database."
+    puts "\nScraping completed!"
+    puts "#{count - Song.count >= 0 ? count - Song.count : 0} songs were removed from the database."
   end
 
   def scrape_nonRESTful_url(songs)
