@@ -46,9 +46,8 @@ module LyricsScraper
       lyrics_containers = html.css('div.Lyrics__Container-sc-1ynbvzw-8')
       write_lyrics_to_file(lyrics_containers, song)
     rescue => e
-      if e.message == "undefined method `text' for nil:NilClass"
-        parse_page(song, browser, driver)
-      end
+      puts e
+      binding.pry
     end
 
 
